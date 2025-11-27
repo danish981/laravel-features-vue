@@ -31,15 +31,32 @@ npm install
 
 ### Compile and Hot-Reload for Development
 
-```sh
+````sh
 npm run dev
-```
+
+## Tailwind CSS (added)
+
+This project now uses Tailwind CSS (configured with PostCSS). The repo contains:
+
+- `tailwind.config.cjs` — Tailwind config that scans `./src` and `index.html` for class usage
+- `postcss.config.cjs` — PostCSS setup with Tailwind and Autoprefixer
+- `src/styles/tailwind.css` — main stylesheet with Tailwind directives; imported in `src/main.ts`
+
+If you add new file globs that contain Tailwind classes (for example new folders), update `content` in `tailwind.config.cjs`.
+
+If you haven't already installed dependencies (if you're working on a fresh checkout), run:
+
+```sh
+npm install
+````
+
+````
 
 ### Type-Check, Compile and Minify for Production
 
 ```sh
 npm run build
-```
+````
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 

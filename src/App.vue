@@ -1,76 +1,62 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+
+const auth = useAuthStore()
+const router = useRouter()
+
+const isAuthenticated = computed(() => auth.isAuthenticated)
+
+async function onLogout() {
+  await auth.logout()
+  router.push({ name: 'Home' })
+}
 </script>
-
 <template>
-  <div class="welcome">
-    <h1>Welcome 🎉</h1>
-    <p class="tagline">You're building something new — and that's always exciting.</p>
+  <div class="min-h-screen bg-slate-50 text-slate-900">
+    <header class="bg-white border-b border-slate-100">
+      <div class="max-w-6xl mx-auto px-4 py-4 flex items-center gap-4">
+        <h1 class="text-xl font-semibold">Laravel + Vue</h1>
 
-    <div class="card">
-      <h2>Vue + Laravel API</h2>
-      <p>
-        This page is the start of your journey.
-        You're now connecting Vue with your Laravel project and learning by doing — the best way to grow.
-      </p>
-      <p>
-        Explore the Vue documentation here:<br />
-        <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a>
-      </p>
-    </div>
+        <nav class="ml-auto flex items-center gap-4 text-sm">
+          <router-link to="/" class="text-slate-700 hover:text-slate-900">Home</router-link>
+          <router-link to="/profile" class="text-slate-700 hover:text-slate-900"
+            >Profile</router-link
+          >
 
-    <footer>
-      <small>Keep going. Small steps turn into real skill ✨</small>
+          <template v-if="isAuthenticated">
+            <span class="text-slate-600 ml-4">{{
+              auth.user?.name || auth.user?.email || 'You'
+            }}</span>
+            <button
+              @click="onLogout"
+              class="ml-3 inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700"
+            >
+              Logout
+            </button>
+          </template>
+
+          <template v-else>
+            <router-link to="/login" class="text-slate-700 hover:text-slate-900">Login</router-link>
+            <router-link
+              to="/register"
+              class="ml-3 inline-flex items-center gap-2 px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700"
+              >Register</router-link
+            >
+          </template>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-10">
+      <router-view />
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-4 py-8 text-center text-sm text-slate-500">
+      Keep going. Small steps turn into real skill ✨
     </footer>
   </div>
 </template>
 
-<style scoped>
-.welcome {
-  max-width: 700px;
-  margin: 4rem auto;
-  padding: 2rem;
-  text-align: center;
-  font-family: "Inter", sans-serif;
-  color: #333;
-}
-
-h1 {
-  font-size: 2.6rem;
-  margin-bottom: 0.5rem;
-}
-
-.tagline {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-  opacity: 0.8;
-}
-
-.card {
-  background: #f5f8ff;
-  padding: 1.8rem;
-  border-radius: 12px;
-  border: 1px solid #dbe3ff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-bottom: 2rem;
-}
-
-.card h2 {
-  margin-bottom: 0.5rem;
-  font-size: 1.6rem;
-}
-
-.card a {
-  color: #3e7bff;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.card a:hover {
-  text-decoration: underline;
-}
-
-footer {
-  margin-top: 2rem;
-  opacity: 0.7;
-}
-</style>
+<!-- App-level component now uses Tailwind utilities; styles handled globally in src/styles/tailwind.css -->
